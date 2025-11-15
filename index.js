@@ -1,5 +1,3 @@
-require('dotenv').config();  // 🔥 Debe ir arriba del todo
-
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 const client = new Client({
@@ -10,10 +8,10 @@ const client = new Client({
   ]
 });
 
-// CONFIGURACIONES DESDE .env
-const BOT_A_DETECTAR = process.env.BOT_A_DETECTAR;
-const CANAL_A_ESCUCHAR = process.env.CANAL_A_ESCUCHAR;
-const ROL_PING = process.env.ROL_PING;
+// CONFIGURACIONES
+const BOT_A_DETECTAR = "429457053791158281";    // ID del bot que crea las aventuras
+const CANAL_A_ESCuchar = "1424603346081288302"; // ID del canal donde debe mirar
+const ROL_PING = "1439150547025530981";         // ID del rol al que se pinguea
 
 client.on('clientReady', () => {
   console.log(`Bot conectado como ${client.user.tag}`);
@@ -21,22 +19,15 @@ client.on('clientReady', () => {
 
 client.on('messageCreate', (msg) => {
 
-  // Detectar SOLO el canal
-  if (msg.channel.id !== CANAL_A_ESCUCHAR) return;
-
-  // Detectar SOLO el bot específico
+  if (msg.channel.id !== CANAL_A_ESCuchar) return;
   if (msg.author.id !== BOT_A_DETECTAR) return;
-
-  // Detectar el texto clave
   if (!msg.content.includes("Una nueva sala de aventura ha sido creada")) return;
 
-  // --- EMBED ---
   const embed = new EmbedBuilder()
     .setTitle("_ _ ㅤ⬫ ׄ **N**u*e*vɑ **sɑlɑ** de **Ɑ**vent*u*rɑ ꪆ୧ ⬫")
-    .setDescription("ㅤㅤ╰╮ ﹒  La señal está activa, es momento de actuar.")
+    .setDescription("ㅤㅤ╰╮ ﹒ La señal está activa, es momento de actuar.")
     .setColor(0x8C6A44);
 
-  // Enviar ping + embed
   msg.channel.send({
     content: `<@&${ROL_PING}>`,
     embeds: [embed]
@@ -44,4 +35,5 @@ client.on('messageCreate', (msg) => {
 
 });
 
+require('dotenv').config();
 client.login(process.env.TOKEN);
